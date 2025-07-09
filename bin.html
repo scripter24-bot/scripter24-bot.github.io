@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Бинарный генератор</title>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            background: linear-gradient(135deg, #1a1a2e, #16213e);
+            color: #fff;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            overflow: hidden;
+        }
+        
+        .container {
+            text-align: center;
+        }
+        
+        h1 {
+            margin-bottom: 20px;
+            font-size: 2.5rem;
+            text-shadow: 0 0 10px rgba(0, 255, 255, 0.7);
+        }
+        
+        .binary-box {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+            justify-content: center;
+            margin: 30px 0;
+        }
+        
+        .bit {
+            width: 60px;
+            height: 60px;
+            background: rgba(255, 255, 255, 0.1);
+            border: 2px solid #00ffff;
+            border-radius: 8px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 1.5rem;
+            cursor: pointer;
+            transition: all 0.3s;
+            user-select: none;
+        }
+        
+        .bit:hover {
+            background: rgba(0, 255, 255, 0.2);
+            transform: scale(1.1);
+        }
+        
+        .bit.active {
+            background: #00ffff;
+            color: #000;
+            box-shadow: 0 0 15px #00ffff;
+        }
+        
+        button {
+            padding: 12px 25px;
+            background: transparent;
+            border: 2px solid #00ffff;
+            color: #00ffff;
+            font-size: 1rem;
+            border-radius: 50px;
+            cursor: pointer;
+            transition: all 0.3s;
+            margin-top: 20px;
+        }
+        
+        button:hover {
+            background: #00ffff;
+            color: #000;
+            box-shadow: 0 0 15px #00ffff;
+        }
+        
+        .result {
+            margin-top: 30px;
+            font-size: 1.2rem;
+            min-height: 30px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Бинарный Генератор</h1>
+        <p>Кликайте на биты (0/1) или нажмите "Сгенерировать":</p>
+        
+        <div class="binary-box" id="binaryBox">
+            <!-- Битсы будут добавлены через JS -->
+        </div>
+        
+        <button id="generateBtn">Сгенерировать</button>
+        <button id="resetBtn">Сбросить</button>
+        
+        <div class="result" id="result">
+            Ваш код: <span id="binaryResult"></span>
+        </div>
+    </div>
+
+    <script>
+        const binaryBox = document.getElementById('binaryBox');
+        const generateBtn = document.getElementById('generateBtn');
+        const resetBtn = document.getElementById('resetBtn');
+        const binaryResult = document.getElementById('binaryResult');
+        
+        // Создаем 10 битов (0/1)
+        for (let i = 0; i < 10; i++) {
+            const bit = document.createElement('div');
+            bit.className = 'bit';
+            bit.textContent = Math.random() > 0.5 ? '1' : '0';
+            bit.addEventListener('click', () => {
+                bit.textContent = bit.textContent === '0' ? '1' : '0';
+                bit.classList.toggle('active');
+                updateResult();
+            });
+            binaryBox.appendChild(bit);
+        }
+        
+        // Обновляем результат
+        function updateResult() {
+            const bits = Array.from(document.querySelectorAll('.bit')).map(bit => bit.textContent);
+            binaryResult.textContent = bits.join('');
+        }
+        
+        // Генерация случайного кода
+        generateBtn.addEventListener('click', () => {
+            document.querySelectorAll('.bit').forEach(bit => {
+                const randomBit = Math.random() > 0.5 ? '1' : '0';
+                bit.textContent = randomBit;
+                bit.classList.toggle('active', randomBit === '1');
+            });
+            updateResult();
+        });
+        
+        // Сброс
+        resetBtn.addEventListener('click', () => {
+            document.querySelectorAll('.bit').forEach(bit => {
+                bit.textContent = '0';
+                bit.classList.remove('active');
+            });
+            updateResult();
+        });
+        
+        updateResult();
+    </script>
+</body>
+</html>
